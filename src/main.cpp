@@ -15,7 +15,7 @@ BluetoothSerial SerialBT; // 定义一个自拟的蓝牙串口通信名称
 static double ii = 0.01;
 static int iii = 0;
 int mode = 0;        //用于初始化进入随机光效模式
-int mode_select = 4;    //光效模式选择变量
+int mode_select = 0;    //光效模式选择变量
 // int breathe(int kk);
 
 /**********************灯效数学描述函数****************************/
@@ -49,13 +49,13 @@ void breath_mode(int channel_PWM, double &ii, int &iii){
         ii = 3.1;        //半周期阈值
         iii++;             //半周期计数，每过一个半周期自加，指示当前是前半周期还是后半周期。
       }
-      else if (ii <= 0.5)
+      else if (ii <= 1.0)
       {
-        ii = 0.6;
+        ii = 1.25;
         iii++;
         delay(10);
         SerialBT.print(" from 1 mode changed");
-        mode_select == (int)random(2,5);
+        mode_select = (int)random(1,5);
         SerialBT.print(mode_select);
       }
       if (iii % 2 == 0)
@@ -279,7 +279,7 @@ void loop()
   if (func_b)   //进入模式后执行if内语句
   {
       if(mode == 0){          //第一次随机选择，初始化
-      mode_select == (int)random(1,5);
+      mode_select = (int)random(1,5);
       mode = 1;
       SerialBT.print("已选择");
       SerialBT.println(mode_select);
